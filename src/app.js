@@ -44,14 +44,14 @@ app.get('/students/:id', async (req, res) =>{
 // delete specific student
 app.delete('/student/:id', async (req, res) =>{
     // write your codes here
-    if(req.query.type ==='soft'){
+    if(req.query.type =="soft"){
         const student = await Student.findById(req.params.id)
         if(student.isDeleted) return sendStatus(404)
         student.isDeleted = true
         await student.save()
         res.sendStatus(200)
     }
-    if(req.query.type === 'hard'){
+    if(req.query.type == "hard"){
         await Student.deleteOne({_id:req.params.id})
         res.sendStatus(200)
     }
@@ -59,7 +59,7 @@ app.delete('/student/:id', async (req, res) =>{
 }) 
 app.delete('/students/:id', async (req, res) =>{
     // write your codes here
-    if(req.query.type === 'hard'){
+    if(req.query.type == "hard"){
         await Student.deleteOne({_id:req.params.id})
         res.sendStatus(200)
     }
