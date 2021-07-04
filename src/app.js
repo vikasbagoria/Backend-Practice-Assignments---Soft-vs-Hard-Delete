@@ -8,6 +8,11 @@ const app = express();
 app.use(express.json());
 
 // Routes
+// app.use(express.urlencoded());
+// const bodyParser = require("body-parser");
+// app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(bodyParser.json())
+
 
 // Get all the students
 app.get('/students', async (req, res) => {
@@ -38,24 +43,27 @@ app.get('/students/:id', async (req, res) => {
 })
 
 // delete specific student
-app.delete('/students/:id', async (req, res) => {
+app.delete('/student/:id?type=soft||hard', async (req, res) => {
+    console.log(req.query.type);
     if (req.query.type == "soft") {
         const student = await Student.findById(req.params.id)
-        if (student.isDeleted) return res.send(404)
+        if (student.isDeleted) {return sendStatus(404)}
+        else{
         student.isDeleted = true
         await student.save()
-        res.send(200)
+        res.sendStatus(200)
+        }
     }
     if (req.query.type == "hard") {
         await Student.deleteOne({ _id: req.params.id })
-        res.send(200)
+        res.sendStatus(200)
     }
 })
 
-app.delete('/students/:id', async (req, res) => {
+app.delete('/students/:id?type=soft||hard', async (req, res) => {
     if (req.query.type == "hard") {
         await Student.deleteOne({ _id: req.params.id })
-        res.send(200)
+        res.sendStatus(200)
     }
 })
 
